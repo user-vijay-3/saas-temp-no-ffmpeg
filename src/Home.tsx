@@ -4,7 +4,6 @@ import { WelcomeScreen } from "./components/landing/WelcomeScreen";
 import { EditorWorkspace } from "./components/editor/EditorWorkspace";
 import { useVideoUpload } from "./hooks/useVideoUpload";
 import { useSubtitles } from "./hooks/useSubtitles";
-import { useSubtitleStyles } from "./hooks/useSubtitleStyles";
 
 function Home() {
   // State for pro mode toggle
@@ -39,9 +38,6 @@ function Home() {
     setWordsPerSubtitle,
   } = useSubtitles(isPro);
 
-  // Subtitle styling
-  const { globalSubtitleStyle, setGlobalSubtitleStyle } = useSubtitleStyles();
-
   // Handle time updates from video player
   const onTimeUpdate = (time: number) => {
     setCurrentTime(time);
@@ -66,7 +62,6 @@ function Home() {
             currentTime={currentTime}
             currentSubtitleId={currentSubtitleId}
             isPortrait={isPortrait}
-            globalSubtitleStyle={globalSubtitleStyle}
             wordsPerSubtitle={wordsPerSubtitle}
             isPro={isPro}
             fileInputRef={fileInputRef}
@@ -83,7 +78,6 @@ function Home() {
             onDownloadSRT={downloadSRT}
             onReset={handleReset}
             setWordsPerSubtitle={setWordsPerSubtitle}
-            onUpdateStyle={setGlobalSubtitleStyle}
           />
         )}
       </main>

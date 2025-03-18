@@ -28,7 +28,7 @@ export function AppHeader({ isPro, setIsPro }: AppHeaderProps) {
               <FileVideo className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl bg-gradient-to-r from-orange-600 to-amber-600 text-transparent bg-clip-text">
-              Subtitle Studio Pro
+              Subtitle Editor
             </span>
           </div>
           {!isPro && (

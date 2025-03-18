@@ -29,15 +29,18 @@ export function useSubtitles(isPro: boolean) {
         if (content) {
           try {
             const parsedSubtitles = parseSRT(content);
+
             setSubtitles(parsedSubtitles);
             toast({
               title: "SRT file imported successfully",
               description: `Loaded ${parsedSubtitles.length} subtitles`,
             });
           } catch (error) {
+            console.error("SRT import error:", error);
             toast({
               title: "Import failed",
-              description: "Invalid SRT file format",
+              description:
+                "Invalid SRT file format. Please check the file and try again.",
               variant: "destructive",
             });
           }
@@ -310,7 +313,7 @@ export function useSubtitles(isPro: boolean) {
             text: chunk,
             startTime: msToTime(chunkStartTime),
             endTime: msToTime(chunkEndTime),
-            style: subtitle.style, // Preserve any custom styles
+            // No additional properties needed
           });
         });
       });
