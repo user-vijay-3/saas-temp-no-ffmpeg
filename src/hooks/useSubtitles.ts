@@ -313,7 +313,6 @@ export function useSubtitles(isPro: boolean) {
             text: chunk,
             startTime: msToTime(chunkStartTime),
             endTime: msToTime(chunkEndTime),
-            // No additional properties needed
           });
         });
       });

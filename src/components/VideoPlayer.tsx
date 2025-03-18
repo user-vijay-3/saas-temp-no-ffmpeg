@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Move, AlertCircle, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { AlertCircle, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { type Subtitle } from "../types";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
@@ -35,17 +34,7 @@ export const VideoPlayer = React.memo(function VideoPlayer({
   const [aspectRatio, setAspectRatio] = useState("16:9");
   const [error, setError] = useState<string | null>(null);
   const [currentSubtitle, setCurrentSubtitle] = useState<Subtitle | null>(null);
-  const [videoRect, setVideoRect] = useState<{
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  }>({
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0,
-  });
+  // Removed videoRect state as it's no longer needed for subtitle positioning
 
   // Handle video metadata loaded
   useEffect(() => {
@@ -72,49 +61,7 @@ export const VideoPlayer = React.memo(function VideoPlayer({
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
   }, []);
 
-  // Update video dimensions on resize
-  useEffect(() => {
-    const updateVideoDimensions = () => {
-      if (!videoRef.current || !videoContainerRef.current) return;
-
-      const video = videoRef.current;
-      const container = videoContainerRef.current;
-      const containerRect = container.getBoundingClientRect();
-      const videoRatio = video.videoWidth / video.videoHeight;
-
-      let videoWidth = containerRect.width;
-      let videoHeight = containerRect.height;
-
-      if (videoRatio < 1) {
-        // Portrait video
-        videoWidth = containerRect.height * videoRatio;
-        const x = (containerRect.width - videoWidth) / 2;
-        setVideoRect({
-          width: videoWidth,
-          height: containerRect.height,
-          x: x,
-          y: 0,
-        });
-      } else {
-        // Landscape video
-        videoHeight = containerRect.width / videoRatio;
-        const y = (containerRect.height - videoHeight) / 2;
-        setVideoRect({
-          width: containerRect.width,
-          height: videoHeight,
-          x: 0,
-          y: y,
-        });
-      }
-    };
-
-    const resizeObserver = new ResizeObserver(updateVideoDimensions);
-    if (videoContainerRef.current) {
-      resizeObserver.observe(videoContainerRef.current);
-    }
-
-    return () => resizeObserver.disconnect();
-  }, []);
+  // Removed video dimensions resize effect as it's no longer needed for subtitle positioning
 
   // Handle video events
   useEffect(() => {
@@ -203,55 +150,6 @@ export const VideoPlayer = React.memo(function VideoPlayer({
     }
   };
 
-  // Calculate subtitle styles including position and text formatting
-  const getSubtitleStyles = () => {
-    if (!videoRect.width || !videoRect.height) {
-      return {
-        left: "50%",
-        top: "90%",
-        transform: "translate(-50%, -50%)",
-        maxWidth: "80%",
-      };
-    }
-
-    const positionX = 50;
-    const positionY = 90;
-    const fontSize = 24;
-
-    const x = videoRect.x + videoRect.width * (positionX / 100);
-    const y = videoRect.y + videoRect.height * (positionY / 100);
-
-    // Calculate font size based on video dimensions
-    const isPortrait = videoRect.height > videoRect.width;
-    const scaleFactor = isPortrait
-      ? videoRect.width / 500
-      : videoRect.width / 1000;
-    const adjustedFontSize = Math.max(12, Math.min(fontSize * scaleFactor, 48));
-
-    // Calculate max width based on video orientation
-    const maxWidth = isPortrait ? videoRect.width * 0.8 : videoRect.width * 0.8;
-
-    return {
-      position: "absolute" as const,
-      left: `${x}px`,
-      top: `${y}px`,
-      transform: "translate(-50%, -50%)",
-      maxWidth: `${maxWidth}px`,
-      fontSize: `${adjustedFontSize}px`,
-      lineHeight: "1.4",
-      padding: "0.5em",
-      textAlign: "center" as const,
-      whiteSpace: "pre-line" as const,
-      wordBreak: "break-word" as const,
-      wordWrap: "break-word" as const,
-      overflowWrap: "break-word" as const,
-      textShadow: "1px 1px 1px #000000",
-      backgroundColor: "transparent",
-      borderRadius: "4px",
-      pointerEvents: "none" as const,
-    };
-  };
-
   return (
     <div className="space-y-4 p-4">
       <div className="flex items-center justify-between mb-4">
@@ -298,12 +196,8 @@ export const VideoPlayer = React.memo(function VideoPlayer({
 
           {currentSubtitle && (
             <div
-              className="transition-all duration-200"
-              style={{
-                ...getSubtitleStyles(),
-                color: "#FFFFFF",
-                fontFamily: "Arial, sans-serif",
-              }}
+              className="absolute left-1/2 bottom-[10%] -translate-x-1/2 max-w-[80%] text-xl leading-relaxed p-2 text-center text-white whitespace-pre-line break-words pointer-events-none"
+              style={{ textShadow: "1px 1px 1px #000000" }}
             >
               {currentSubtitle.text}
             </div>
