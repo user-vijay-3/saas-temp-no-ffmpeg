@@ -24,7 +24,7 @@ export function WelcomeScreen({
           Create Perfect Subtitles
         </h1>
         <p className="text-xl text-muted-foreground">
-          Professional-grade subtitle editing with AI-powered precision.
+          Professional-grade subtitle editing for your videos.
           <br />
           Start by uploading your video.
         </p>

@@ -36,7 +36,10 @@ export function useVideoUpload() {
         video.preload = "metadata";
 
         const videoLoadPromise = new Promise((resolve, reject) => {
-          video.onloadedmetadata = () => resolve(true);
+          video.onloadedmetadata = () => {
+            handleVideoMetadata(video);
+            resolve(true);
+          };
           video.onerror = () => reject(new Error("Invalid video file"));
 
           // Set timeout for 5 seconds
@@ -72,7 +75,7 @@ export function useVideoUpload() {
         }
       }
     },
-    [toast, videoUrl],
+    [toast, videoUrl, handleVideoMetadata],
   );
 
   return {
