@@ -1,8 +1,7 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { VideoPlayer } from "../VideoPlayer";
-import { StyleEditor } from "../StyleEditor";
-import { type Subtitle, SubtitleStyle } from "../../types";
+import { type Subtitle } from "../../types";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -17,7 +16,6 @@ interface EditorWorkspaceProps {
   currentTime: number;
   currentSubtitleId: number | null;
   isPortrait: boolean;
-  globalSubtitleStyle: SubtitleStyle;
   wordsPerSubtitle: number;
   isPro: boolean;
   fileInputRef: React.RefObject<HTMLInputElement>;
@@ -34,7 +32,6 @@ interface EditorWorkspaceProps {
   onDownloadSRT: () => void;
   onReset: () => void;
   setWordsPerSubtitle: (value: number) => void;
-  onUpdateStyle: (style: SubtitleStyle) => void;
 }
 
 export function EditorWorkspace({
@@ -43,7 +40,6 @@ export function EditorWorkspace({
   currentTime,
   currentSubtitleId,
   isPortrait,
-  globalSubtitleStyle,
   wordsPerSubtitle,
   isPro,
   fileInputRef,
@@ -60,21 +56,11 @@ export function EditorWorkspace({
   onDownloadSRT,
   onReset,
   setWordsPerSubtitle,
-  onUpdateStyle,
 }: EditorWorkspaceProps) {
   return (
     <div className="rounded-xl overflow-hidden border bg-card shadow-lg">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={25} minSize={20}>
-          <div className="h-[calc(100vh-8rem)] bg-gradient-to-b from-background to-muted/10">
-            <StyleEditor
-              style={globalSubtitleStyle}
-              onUpdateStyle={onUpdateStyle}
-            />
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle className="bg-border/50" />
-        <ResizablePanel defaultSize={45} minSize={30}>
+        <ResizablePanel defaultSize={70} minSize={50}>
           <div className="">
             <div className="h-full flex">
               <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-background to-muted/20">
@@ -87,7 +73,6 @@ export function EditorWorkspace({
                     currentTime={currentTime}
                     onTimeUpdate={onTimeUpdate}
                     videoRef={videoRef}
-                    globalSubtitleStyle={globalSubtitleStyle}
                   />
                 </div>
               </div>
